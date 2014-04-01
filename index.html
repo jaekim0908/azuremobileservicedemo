@@ -53,10 +53,9 @@
                         distance: 100
                     }
                 }).done(function (results) {
-                    alert(results);
-                     alert(results.length);
-                    for (var i = 0; i < results.legnth; i++) {
-                        console.log("result = ", results[i]);
+                     alert(results.result.length);
+                    for (var i = 0; i < results.result.legnth; i++) {
+                        console.log("result = ", results.result[i]);
                     }
                 }, function (error) {
                     alert("error in calling custom api");
