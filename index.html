@@ -58,7 +58,7 @@
                 }).done(function (results) {
                     console.log("results = ", results.result.length);
                     for (var i = 0; i < results.result.length; i++) {
-                        console.log("result = " + results.result[i].longitude + " " + results.result[i].latitude + " " + results.result[i].text);
+                        //console.log("result = " + results.result[i].longitude + " " + results.result[i].latitude + " " + results.result[i].text);
                         var messageLocation = new Microsoft.Maps.Location(results.result[i].latitude, results.result[i].longitude);
                         var newPin = new Microsoft.Maps.Pushpin(messageLocation, {
                                 text: results.result[i].userName, 
