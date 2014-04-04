@@ -10,12 +10,18 @@ function refreshAuthDisplay() {
     }
     var isLoggedIn = client.currentUser !== null;
     console.log("isLoggedIn = ", isLoggedIn);
-    $("#logged-in").toggle(isLoggedIn);
-    $("#logged-out").toggle(!isLoggedIn);
+    console.log("client.currentUser = ", JSON.stringify(client.currentUser));
+    $("#sign-in").toggle(!isLoggedIn);
+    $("#sign-out").toggle(isLoggedIn);
 
     if (isLoggedIn) {
         $("#login-name").text(client.currentUser.userId);
         GetMap();
+        $("#map-canvas").toggle(true);
+        $("#post").removeAttr("disabled");
+    }
+    else {
+        $("#post").attr("disabled", "disabled");
     }
 }
 
@@ -40,13 +46,14 @@ function logIn() {
 
 function logOut() {
     client.logout();
+    delete sessionStorage.loggedInUser;
+    $("#map-canvas").toggle(false);
     refreshAuthDisplay();
-    $('#summary').html('<strong>You must login to access data.</strong>');
 }
 
 function GetMap() {
 
-    map = new Microsoft.Maps.Map(document.getElementById("mapDiv"), {
+    map = new Microsoft.Maps.Map(document.getElementById("map-canvas"), {
                 credentials: "AvXb0M3CEYHOkLKJCr9tGJyXLzuTbi8hqLPCkLB7Cd6MvvYXMytLru8-Ykm5iRN2",
                 center: new Microsoft.Maps.Location(45.5, -122.5),
                 mapTypeId: Microsoft.Maps.MapTypeId.road,
@@ -65,7 +72,7 @@ function GetMap() {
 
 function locateSuccess(loc) {
     userLocation = new Microsoft.Maps.Location(loc.coords.latitude, loc.coords.longitude);
-    map.setView({ center: userLocation, zoom: 15 });
+    map.setView({ center: userLocation, zoom: 10 });
     //var locationArea = drawCircle(userLocation);
     //var pin = new Microsoft.Maps.Pushpin(userLocation, { text: '1', draggable: false });
     //map.entities.push(pin);
@@ -144,9 +151,10 @@ function drawCircle(loc) {
 }
 console.log("calling refreshAuthDisplay");
 // On page init, fetch the data and set up event handlers
-$(function () {
+$(document).ready(function () {
+    $("#map-canvas").toggle(false);
     refreshAuthDisplay();
     $('#summary').html('<strong>You must login to access data.</strong>');
-    $("#logged-out button").click(logIn);
-    $("#logged-in button").click(logOut);
+    $("#sign-out").click(logOut);
+    $("#sign-in").click(logIn);
 });
