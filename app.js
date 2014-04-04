@@ -3,6 +3,7 @@ var client = new WindowsAzure.MobileServiceClient(
                         "igrhDCBgNDHWlggSIAYmAZSlXTllup93");
 var map = null;
 var userLocation = null;
+var place = null;
 
 function refreshAuthDisplay() {
     if (sessionStorage.loggedInUser) {
@@ -54,11 +55,11 @@ function logOut() {
 function GetMap() {
 
     map = new Microsoft.Maps.Map(document.getElementById("map-canvas"), {
-                credentials: "AvXb0M3CEYHOkLKJCr9tGJyXLzuTbi8hqLPCkLB7Cd6MvvYXMytLru8-Ykm5iRN2",
-                center: new Microsoft.Maps.Location(45.5, -122.5),
-                mapTypeId: Microsoft.Maps.MapTypeId.road,
-                zoom: 7
-            });
+        credentials: "AvXb0M3CEYHOkLKJCr9tGJyXLzuTbi8hqLPCkLB7Cd6MvvYXMytLru8-Ykm5iRN2",
+        center: new Microsoft.Maps.Location(45.5, -122.5),
+        mapTypeId: Microsoft.Maps.MapTypeId.road,
+        zoom: 7
+    });
     //var center = map.getCenter();
     //var pin = new Microsoft.Maps.Pushpin(center, { text: '1', draggable: true });
     //map.entities.push(pin);
@@ -71,6 +72,7 @@ function GetMap() {
 }
 
 function locateSuccess(loc) {
+    place = loc;
     userLocation = new Microsoft.Maps.Location(loc.coords.latitude, loc.coords.longitude);
     map.setView({ center: userLocation, zoom: 10 });
     //var locationArea = drawCircle(userLocation);
@@ -149,6 +151,20 @@ function drawCircle(loc) {
     }
     return new Microsoft.Maps.Polygon(locs, { fillColor: new Microsoft.Maps.Color(125, 0, 0, 255), strokeColor: new Microsoft.Maps.Color(0, 0, 0, 255) });
 }
+
+function insertComment(msg) {
+    alert("inserting comment");
+    var item2 = {
+        text: "Happy coding !!!2",
+        userName: "Michael Jordon2",
+        imageName: "my cat2",
+        longitude: place.coords.longitude.toString(),
+        latitude: place.coords.latitude.toString()
+    }
+    var itemTable = client.getTable("Item");
+    itemTable.insert(item2);
+}
+
 console.log("calling refreshAuthDisplay");
 // On page init, fetch the data and set up event handlers
 $(document).ready(function () {
@@ -157,4 +173,5 @@ $(document).ready(function () {
     $('#summary').html('<strong>You must login to access data.</strong>');
     $("#sign-out").click(logOut);
     $("#sign-in").click(logIn);
+    $("#submitComment").click(insertComment);
 });
