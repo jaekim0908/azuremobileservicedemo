@@ -79,21 +79,21 @@ function locateSuccess(loc) {
     //var pin = new Microsoft.Maps.Pushpin(userLocation, { text: '1', draggable: false });
     //map.entities.push(pin);
     //map.entities.push(locationArea);
-    var item = { text: "Awesome item10",
-        userName: "Jae Kim2",
-        imageName: "my dog2",
-        longitude: loc.coords.longitude.toString(),
-        latitude: loc.coords.latitude.toString()
-    }
-    var itemTable = client.getTable("Item");
-    itemTable.insert(item);
+    //var item = { text: "Awesome item10",
+    //    userName: "Jae Kim2",
+    //    imageName: "my dog2",
+    //    longitude: loc.coords.longitude.toString(),
+    //    latitude: loc.coords.latitude.toString()
+    //}
+    //var itemTable = client.getTable("Item");
+    //itemTable.insert(item);
     client.invokeApi("getmessagesbylocation", {
         body: null,
         method: "GET",
         parameters: {
             longitude: loc.coords.longitude,
             latitude: loc.coords.latitude,
-            distance: 100000
+            distance: 1000
         }
     }).done(function (results) {
         console.log("results = ", results.result.length);
@@ -106,7 +106,10 @@ function locateSuccess(loc) {
                 typeName: results.result[i].id
             });
             map.entities.push(newPin);
-            $('.' + results.result[i].id).children().attr('title', results.result[i].text);
+            $('.' + results.result[i].id).attr('title', results.result[i].text).attr('data-toggle', 'tooltip').attr('data-placement', 'top').tooltip();
+            //$('.' + results.result[i].id).attr('title', 'tool tip there. i was here and there everywhere').attr('data-toggle', 'tooltip').attr('data-placement', 'top').tooltip();
+            //$('.' + results.result[i].id).children().attr('title', 'tool tip there. i was here and there everywhere');
+            //$("body").tooltip({ selector: '[data-toggle=tooltip]' });
         }
     }, function (err) {
         alert("Error: " + err);
@@ -154,15 +157,33 @@ function drawCircle(loc) {
 
 function insertComment(msg) {
     alert("inserting comment");
-    var item2 = {
+    var newLongitude = Math.round((place.coords.longitude + Math.random() * 0.02) * 10000)/10000;
+    var newLatitude = Math.round((place.coords.latitude + Math.random() * 0.02) * 10000)/10000;;
+    var item = {
         text: "Happy coding !!!2",
         userName: "Michael Jordon2",
         imageName: "my cat2",
-        longitude: place.coords.longitude.toString(),
-        latitude: place.coords.latitude.toString()
+        longitude: newLongitude.toString(),
+        latitude: newLatitude.toString()
     }
     var itemTable = client.getTable("Item");
-    itemTable.insert(item2);
+    itemTable.insert(item).done(function (inserted) {
+        console.log("inserted = ", JSON.stringify(inserted));
+        alert("item = ", JSON.stringify(item));
+        var newMessageLocation = new Microsoft.Maps.Location(newLatitude, newLongitude);
+        var newPin = new Microsoft.Maps.Pushpin(newMessageLocation, {
+            typeName: inserted.id
+        });
+        map.entities.push(newPin);
+        $('.' + inserted.id).attr('title', inserted.text).attr('data-toggle', 'tooltip').attr('data-placement', 'top').tooltip();
+    }, function (err) {
+        alert("Error in inserting comment", err);
+    });
+
+    //var newMessageLocation = new Microsoft.Maps.Location(place.coords.latitude, place.coords.longitude);
+    //var newPin = new Microsoft.Maps.Pushpin(newMessageLocation, {
+    //    typeName: results.result[i].id
+    //});
 }
 
 console.log("calling refreshAuthDisplay");
