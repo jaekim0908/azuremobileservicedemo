@@ -10,7 +10,6 @@ function refreshAuthDisplay() {
         client.currentUser = JSON.parse(sessionStorage.loggedInUser);
     }
     var isLoggedIn = client.currentUser !== null;
-    console.log("isLoggedIn = ", isLoggedIn);
     console.log("client.currentUser = ", JSON.stringify(client.currentUser));
     $("#sign-in").toggle(!isLoggedIn);
     $("#sign-out").toggle(isLoggedIn);
@@ -34,7 +33,7 @@ function logIn() {
         refreshAuthDisplay();
     }
     else {
-        client.login("google").done(function (results) {
+        client.login("microsoftaccount").done(function (results) {
             alert("You are now logged in as: " + results.userId);
             console.log("current user = ", JSON.stringify(client.currentUser));
             sessionStorage.loggedInUser = JSON.stringify(client.currentUser);
@@ -54,27 +53,31 @@ function logOut() {
 
 function GetMap() {
 
-    map = new Microsoft.Maps.Map(document.getElementById("map-canvas"), {
-        credentials: "AvXb0M3CEYHOkLKJCr9tGJyXLzuTbi8hqLPCkLB7Cd6MvvYXMytLru8-Ykm5iRN2",
-        center: new Microsoft.Maps.Location(45.5, -122.5),
-        mapTypeId: Microsoft.Maps.MapTypeId.road,
-        zoom: 7
-    });
-    //var center = map.getCenter();
-    //var pin = new Microsoft.Maps.Pushpin(center, { text: '1', draggable: true });
-    //map.entities.push(pin);
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(locateSuccess, locateFail);
     }
     else {
         alert('Geo location is not supported');
     }
+
+    Microsoft.Maps.loadModule('Microsoft.Maps.Themes.BingTheme', { callback: themesModuleLoaded });
+}
+
+ function themesModuleLoaded() {
+        // Load the map using the Bing theme style.
+     map = new Microsoft.Maps.Map(document.getElementById("map-canvas"), {
+         credentials: "AvXb0M3CEYHOkLKJCr9tGJyXLzuTbi8hqLPCkLB7Cd6MvvYXMytLru8-Ykm5iRN2",
+         center: new Microsoft.Maps.Location(45.5, -122.5),
+         mapTypeId: Microsoft.Maps.MapTypeId.road,
+         zoom: 13,
+         theme: new Microsoft.Maps.Themes.BingTheme()
+     });
 }
 
 function locateSuccess(loc) {
     place = loc;
     userLocation = new Microsoft.Maps.Location(loc.coords.latitude, loc.coords.longitude);
-    map.setView({ center: userLocation, zoom: 10 });
+    map.setView({ center: userLocation, zoom: 13 });
     //var locationArea = drawCircle(userLocation);
     //var pin = new Microsoft.Maps.Pushpin(userLocation, { text: '1', draggable: false });
     //map.entities.push(pin);
@@ -88,39 +91,37 @@ function locateSuccess(loc) {
     //var itemTable = client.getTable("Item");
     //itemTable.insert(item);
     client.invokeApi("getmessagesbylocation", {
-        body: null,
         method: "GET",
         parameters: {
             longitude: loc.coords.longitude,
             latitude: loc.coords.latitude,
-            distance: 1000
+            distance: 10000
         }
     }).done(function (results) {
         console.log("results = ", results.result.length);
         for (var i = 0; i < results.result.length; i++) {
             //console.log("result = " + results.result[i].longitude + " " + results.result[i].latitude + " " + results.result[i].text);
             var messageLocation = new Microsoft.Maps.Location(results.result[i].latitude, results.result[i].longitude);
-            var newPin = new Microsoft.Maps.Pushpin(messageLocation, {
-                text: results.result[i].userName,
-                draggable: false,
-                typeName: results.result[i].id
-            });
+            var newPin = new Microsoft.Maps.Pushpin(messageLocation);
+            var pinInfobox = new Microsoft.Maps.Infobox(messageLocation, { pushpin: newPin, title: results.result[i].text});
+
             map.entities.push(newPin);
-            $('.' + results.result[i].id).attr('title', results.result[i].text).attr('data-toggle', 'tooltip').attr('data-placement', 'top').tooltip();
-            //$('.' + results.result[i].id).attr('title', 'tool tip there. i was here and there everywhere').attr('data-toggle', 'tooltip').attr('data-placement', 'top').tooltip();
-            //$('.' + results.result[i].id).children().attr('title', 'tool tip there. i was here and there everywhere');
-            //$("body").tooltip({ selector: '[data-toggle=tooltip]' });
-        }
+            map.entities.push(pinInfobox);
+            //$('.' + results.result[i].id).attr('title', results.result[i].text).attr('data-toggle', 'tooltip').attr('data-placement', 'top').tooltip();
+       }
     }, function (err) {
         alert("Error: " + err);
     });
-
-    //var query = itemTable.read().done(function (results) {
-    //    alert(JSON.stringify(results));
-    //}, function (err) {
-    //    alert("Error: " + err);
-    //});
 }
+
+function displayInfobox(e) {
+    pinInfobox.setOptions({ visible:true });
+}                    
+
+function hideInfobox(e) {
+    pinInfobox.setOptions({ visible: false });
+}
+
 
 function locateFail(geoPositionError) {
     switch (geoPositionError.code) {
@@ -156,11 +157,11 @@ function drawCircle(loc) {
 }
 
 function insertComment(msg) {
-    alert("inserting comment");
-    var newLongitude = Math.round((place.coords.longitude + Math.random() * 0.02) * 10000)/10000;
-    var newLatitude = Math.round((place.coords.latitude + Math.random() * 0.02) * 10000)/10000;;
+    $("#userComment").val("");
+    var newLongitude = Math.round((place.coords.longitude + Math.random() * 0.05) * 10000)/10000;
+    var newLatitude = Math.round((place.coords.latitude + Math.random() * 0.05) * 10000)/10000;;
     var item = {
-        text: "Happy coding !!!2",
+        text: msg,
         userName: "Michael Jordon2",
         imageName: "my cat2",
         longitude: newLongitude.toString(),
@@ -168,14 +169,12 @@ function insertComment(msg) {
     }
     var itemTable = client.getTable("Item");
     itemTable.insert(item).done(function (inserted) {
-        console.log("inserted = ", JSON.stringify(inserted));
-        alert("item = ", JSON.stringify(item));
         var newMessageLocation = new Microsoft.Maps.Location(newLatitude, newLongitude);
-        var newPin = new Microsoft.Maps.Pushpin(newMessageLocation, {
-            typeName: inserted.id
-        });
+        var newPin = new Microsoft.Maps.Pushpin(newMessageLocation);
+        var pinInfobox = new Microsoft.Maps.Infobox(newMessageLocation, { pushpin: newPin, title: msg });
         map.entities.push(newPin);
-        $('.' + inserted.id).attr('title', inserted.text).attr('data-toggle', 'tooltip').attr('data-placement', 'top').tooltip();
+        map.entities.push(pinInfobox);
+        map.setView({ center: newMessageLocation, zoom: 15 });
     }, function (err) {
         alert("Error in inserting comment", err);
     });
@@ -191,8 +190,9 @@ console.log("calling refreshAuthDisplay");
 $(document).ready(function () {
     $("#map-canvas").toggle(false);
     refreshAuthDisplay();
-    $('#summary').html('<strong>You must login to access data.</strong>');
     $("#sign-out").click(logOut);
     $("#sign-in").click(logIn);
-    $("#submitComment").click(insertComment);
+    $("#submitComment").click($("#userComment"), function (event) {
+        insertComment(event.data.val());
+    });
 });
