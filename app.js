@@ -4,6 +4,13 @@ var client = new WindowsAzure.MobileServiceClient(
 var map = null;
 var userLocation = null;
 var place = null;
+var LoginOptions = {
+    MICROSOFT: "microsoftaccount",
+    GOOGLE: "google",
+    FACEBOOK: "facebook",
+    TWITTER: "twitter",
+    AZURE_ACTIVE_DIRECTORY: "windowsazureactivedirectory"
+};
 
 function refreshAuthDisplay() {
     if (sessionStorage.loggedInUser) {
@@ -11,7 +18,6 @@ function refreshAuthDisplay() {
     }
     var isLoggedIn = client.currentUser !== null;
     console.log("client.currentUser = ", JSON.stringify(client.currentUser));
-    $("#sign-in").toggle(!isLoggedIn);
     $("#sign-out").toggle(isLoggedIn);
 
     if (isLoggedIn) {
@@ -25,7 +31,7 @@ function refreshAuthDisplay() {
     }
 }
 
-function logIn() {
+function logIn(loginAccount) {
 
     if (sessionStorage.loggedInUser) {
         console.log("user's session has been saved");
@@ -33,7 +39,7 @@ function logIn() {
         refreshAuthDisplay();
     }
     else {
-        client.login("microsoftaccount").done(function (results) {
+        client.login(loginAccount).done(function (results) {
             alert("You are now logged in as: " + results.userId);
             console.log("current user = ", JSON.stringify(client.currentUser));
             sessionStorage.loggedInUser = JSON.stringify(client.currentUser);
@@ -191,7 +197,15 @@ $(document).ready(function () {
     $("#map-canvas").toggle(false);
     refreshAuthDisplay();
     $("#sign-out").click(logOut);
-    $("#sign-in").click(logIn);
+    $("#sign-in-msft").click(function (event) {
+        logIn(LoginOptions.MICROSOFT);
+    });
+    $("#sign-in-google").click(function (event) {
+        logIn(LoginOptions.GOOGLE);
+    });
+    $("#sign-in-aad").click(function (event) {
+        logIn(LoginOptions.AZURE_ACTIVE_DIRECTORY);
+    });
     $("#submitComment").click($("#userComment"), function (event) {
         insertComment(event.data.val());
     });
