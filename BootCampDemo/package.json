@@ -1,0 +1,10 @@
+{
+  "name": "BootCampDemo",
+  "version": "0.0.0",
+  "description": "BootCampDemo",
+  "main": "server.js",
+  "author": {
+    "name": "jaekim",
+    "email": ""
+  }
+}
