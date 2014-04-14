@@ -5,6 +5,7 @@
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
     <Name>BootCampDemo</Name>
     <RootNamespace>BootCampDemo</RootNamespace>
+    <NameOfLastUsedPublishProfile>vmb</NameOfLastUsedPublishProfile>
   </PropertyGroup>
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -32,7 +33,9 @@
     <Compile Include="app.js" />
     <Compile Include="server.js" />
     <Content Include="css\app.css" />
+    <Content Include="tutorial.html" />
     <Content Include="index.html" />
+    <None Include="vmb.pubxml" />
     <Content Include="Web.config" />
     <Content Include="Web.cloud.config" />
     <Content Include="bin\ChangeConfig.ps1" />
