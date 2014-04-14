@@ -1,0 +1,490 @@
+﻿<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="http://fonts.googleapis.com/css?family=Cabin+Sketch|Open+Sans" rel="stylesheet" type="text/css">
+    <script type="text/javascript" src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.9.1.min.js"></script>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap-theme.min.css">
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+    <style id="holderjs-style" type="text/css"></style>
+    <link rel="stylesheet" href="http://yandex.st/highlightjs/8.0/styles/default.min.css">
+    <script src="http://yandex.st/highlightjs/8.0/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+    <style>
+        body {
+            padding-top: 70px;
+            padding-bottom: 30px;
+        }
+
+        .theme-dropdown .dropdown-menu {
+            position: static;
+            display: block;
+            margin-bottom: 20px;
+        }
+
+        .theme-showcase > p > .btn {
+            margin: 5px 0;
+        }
+    </style>
+    <title>Virtual Message Board</title>
+</head>
+<body role="document">
+    <div class="container theme-showcase" role="main">
+        <div class="jumbotron">
+            <h1> Virtual Message Board</h1>
+            <p></p>
+            <p>
+                Virtual Message Board is a geolocation application that allows users to post their messages by placing them in real world locations. The application uses Azure Website, Mobile Services. Azure Mobile Services makes the mobile/web backend development really easy and simple so the developers can focus on their applications.
+            </p>
+            <center>
+                <p>
+                    <small>
+                        Download code for this tutorial
+                    </small>
+                </p>
+                <p>
+                    <a href="https://github.com/jaekim0908/azuremobileservicedemo/archive/master.zip" class="btn btn-primary btn-lg" role="button">.zip File</a>
+                    <a href="https://github.com/jaekim0908/azuremobileservicedemo" class="btn btn-success btn-lg" role="button">GitHub</a>
+                </p>
+            </center>
+        </div>
+
+        This tutorial will guide you through the steps and code for the virtual message board application. You can play around with the <a href="http://vmb.azurewebsites.net">live application here.</a>
+        You will notice that the entire app is very simple and this is the benefit of using Azure Mobile Service as the backend of your javascript app.
+        <p>A screenshot of the completed application is below:</p>
+        <div class="thumbnail">
+            <img src="http://azurebootcamp2014.blob.core.windows.net/bootcamp2014/FinishedApp.PNG" />
+        </div>
+        <div class="page-header">
+            <h1>Dependencies</h1>
+            <ul>
+                <li>
+                    <a href="http://msdn.microsoft.com/en-US/library/azure/ff687127.aspx">Azure Tools for Visual Studio</a>
+                </li>
+                <li>
+                    <a href="https://nodejstools.codeplex.com/">Node.js Tools for Visual Studio</a>
+                </li>
+            </ul>
+        </div>
+        <div class="page-header">
+            <h1>Create a Mobile Service</h1>
+            <p>
+                Login into Azure Management Portal and click on MOBILE SERVICES on the left panel. Then select "NEW" from bottom left corner of the screen.
+            </p>
+            <div class="thumbnail">
+                <img src="http://azurebootcamp2014.blob.core.windows.net/bootcamp2014/create_mobile_service_step1.PNG" />
+            </div>
+            <p>
+                Specify Mobile Service URL
+            </p>
+            <div class="thumbnail">
+                <img src="http://azurebootcamp2014.blob.core.windows.net/bootcamp2014/create_mobile_service_step2.PNG" />
+            </div>
+            <p>
+                Specify DB Setting
+            </p>
+            <div class="thumbnail">
+                <img src="http://azurebootcamp2014.blob.core.windows.net/bootcamp2014/create_mobile_service_step3.PNG" />
+            </div>
+            <p>
+                It's done. You should see your mobile service name on the dashboard.
+            </p>
+        </div>
+        <div class="page-header">
+            <h1>
+                Integrate Mobile Service backend
+            </h1>
+            <p>
+                Click on your mobile service name and go to the detail page. Copy the code for creating a mobile service client.
+            </p>
+            <div class="thumbnail">
+                <img src="http://azurebootcamp2014.blob.core.windows.net/bootcamp2014/create_mobile_service_step4.PNG" />
+            </div>
+            <p>
+                Replace the following code in app.js with the code copied above.
+            </p>
+<pre>
+<code>
+var client = new WindowsAzure.MobileServiceClient(
+    "YOUR MOBILE SERVICE URL HERE",
+    "YOUR APPLICATION KEY HERE");
+</code>
+</pre>
+        </div>
+        <div class="page-header">
+            <h1>
+                Create a DB Table
+            </h1>
+            <p>
+                Go to Step 2 (Store data in your mobile service) in GET STARTED page.
+                Mobile service will create a table called "Item" with 4 default columns - id, _createdAt, _updatedAt and _version.
+                You can override the id column with your own unique value if you want.
+                Other columns will be automatically populated when you perform insert and update on this table.
+            </p>
+            <div class="thumbnail">
+                <img src="http://azurebootcamp2014.blob.core.windows.net/bootcamp2014/create_table_step1.PNG" />
+            </div>
+            <p>
+                You can go to "Data" menu of your mobile service. Next: Select your table name ("Item") then "Columns" to see the table's detail.
+            </p>
+            <div class="thumbnail">
+                <img src="http://azurebootcamp2014.blob.core.windows.net/bootcamp2014/create_table_step1-a.PNG">
+            </div>
+            <div class="thumbnail">
+                <img src="http://azurebootcamp2014.blob.core.windows.net/bootcamp2014/create_table_step2.PNG">
+            </div>
+        </div>
+        <div class="page-header">
+            <h1>
+                Adding new columns to Item table.
+            </h1>
+            <p>
+                Our application handles the location data we need to create a column which can store a point data (latitude and longitude).
+                This data type is not supported in the mobile service UI so we need to connect to the database to add this column.
+                Select SQL DB databases from the side bar in Azure management portal, select the database the mobile service is using then click "Manage" from the bottom drawer.
+            </p>
+            <div class="thumbnail">
+                <img src="http://azurebootcamp2014.blob.core.windows.net/bootcamp2014/add_column_to_db_step1.PNG">
+            </div>
+            <p>
+                If you can't connect to your DB one of the common issues is the firewall setting.
+                If you run into this issue take an IP address from the error message and add that to the firewall configuration through the management portal.
+            </p>
+            <div class="thumbnail">
+                <img src="http://azurebootcamp2014.blob.core.windows.net/bootcamp2014/sql_connect_error.PNG">
+            </div>
+            <p>
+                Go to the database dashboard and select "Manage allowed IP addresses".
+            </p>
+            <div class="thumbnail">
+                <img src="http://azurebootcamp2014.blob.core.windows.net/bootcamp2014/managed_allowed_ip_step1.PNG">
+            </div>
+            <p>
+                Add the IP address obtained from the db connect error message and add it to the allowed IP address list and hit "Save".
+            </p>
+            <div class="thumbnail">
+                <img src="http://azurebootcamp2014.blob.core.windows.net/bootcamp2014/managed_allowed_ip_step2.PNG">
+            </div>
+            <p>
+                Once logged into the your DB's web management portal select your db and table then hit "Edit".
+            </p>
+            <div class="thumbnail">
+                <img src="http://azurebootcamp2014.blob.core.windows.net/bootcamp2014/add_column_to_db_step2.PNG">
+            </div>
+            <p>
+                Add 2 columns to your table. text as nvarchar(255) and place as geography type and hit "Save".
+            </p>
+            <div class="thumbnail">
+                <img src="http://azurebootcamp2014.blob.core.windows.net/bootcamp2014/add_column_to_db_step3.PNG">
+            </div>
+        </div>
+        <div class="page-header">
+            <h1>
+                Authentication
+            </h1>
+            <p>
+                We are done with the basic plumbing and environment set up. It's time to dd some application logic, start with the authentication.
+                Azure Mobile Service makes adding various authentication options really easy. You can add the authentication options to use Microsoft account, Google Account, Facebook, Twitter and Azure Active Directory.
+                In this tutorial, we're going to show you how to set up the authentication using Microsoft account login. If you want to interested in setting up other types of authentications you can go to
+                <a href="http://azure.microsoft.com/en-us/documentation/articles/mobile-services-html-get-started-users/">Azure Mobile Service Authentication</a> and follow the instructions there.
+                Also, this demo app has implemented 3 different authentication options so you can take a look.
+                To start, let's do CRTL + F5 to start your application. Once it's loaded try to login with Microsoft account. You will get the login failure message. Let's fix this.
+                Go to:
+                <a href="http://azure.microsoft.com/en-us/documentation/articles/mobile-services-how-to-register-microsoft-authentication/">
+                    Register your app to use a Microsoft Account login
+                </a>
+                and follow the instructions to register your end.
+            </p>
+            <div class="alert alert-danger">
+                <strong>
+                    You can't use your @microsoft.com user id to register your app.
+                </strong>
+            </div>
+            <p>
+                When the registration is successful go to "Identity" menu of your mobile service and provide "client id" and "client secrect" for Microsoft account.
+            </p>
+            <div class="thumbnail">
+                <img src="http://azurebootcamp2014.blob.core.windows.net/bootcamp2014/authentication_ms_step1.PNG">
+            </div>
+            <p>
+                Now, go back to your application and try to login with Microsoft account again. You should be able to log in successfully.
+                After logging in, you will see an error message and we will address it later.
+            </p>
+            <div class="thumbnail">
+                <img src="http://azurebootcamp2014.blob.core.windows.net/bootcamp2014/authentication_ms_step2.PNG">
+            </div>
+            <p>
+                Here is the code that handles the login.
+            </p>
+<pre>
+<code>
+var LoginOptions = {
+    MICROSOFT: "microsoftaccount",
+    GOOGLE: "google",
+    FACEBOOK: "facebook",
+    TWITTER: "twitter",
+    AZURE_ACTIVE_DIRECTORY: "windowsazureactivedirectory"
+};
+function logIn(loginAccount) {
+    if (sessionStorage.loggedInUser) {
+        client.currentUser = JSON.parse(sessionStorage.loggedInUser);
+        refreshAuthDisplay();
+    }
+    else {
+        client.login(loginAccount).done(function (results) {
+            alert("You are now logged in as: " + results.userId);
+            sessionStorage.loggedInUser = JSON.stringify(client.currentUser);
+            refreshAuthDisplay();
+        }, function (err) {
+            alert("Log in Error: " + err);
+        });
+    }
+}
+function logOut() {
+    client.logout();
+    delete sessionStorage.loggedInUser;
+    $("#map-canvas").toggle(false);
+    refreshAuthDisplay();
+}
+$("#sign-in-msft").click(function (event) {
+    logIn(LoginOptions.MICROSOFT);
+});
+</code>
+</pre>
+        </div>
+        <div class="page-header">
+            <h1>
+                GetMessagesByLocation()
+            </h1>
+            <p>
+                This function takes logitude and latitude of the current location and distance in meter.
+                It returns a list of messages whose locations are within the distance.
+                This function is implmented as a customer API of the mobile service.
+                Go to API menu of the mobile service and create a custom api.
+            </p>
+            <div class="thumbnail">
+                <img src="http://azurebootcamp2014.blob.core.windows.net/bootcamp2014/ms_custom_api_step1.PNG">
+            </div>
+            <p>
+                In addition, we want to set the permissions for any access to this API for only authenticated users.
+            </p>
+            <div class="thumbnail">
+                <img src="http://azurebootcamp2014.blob.core.windows.net/bootcamp2014/ms_custom_api_step2.PNG">
+            </div>
+            <p>
+                Replace <strong>exports.get</strong> with the following code snippet.
+                When the request comes in this will execute the query the database to select all messages whose locations are within the distance provided in the parameter.
+            </p>
+<pre>
+<code>
+exports.get = function(request, response) {
+    var queryString = "SELECT id, text, place.Long longitude, place.Lat latitude FROM Item WHERE place IS NOT NULL AND place.STDistance(geography::STPointFromText('POINT(' + ? + ' ' + ? + ')', 4326)) <= ?";
+    
+    request.service.mssql.query(queryString, 
+                                [request.query.longitude.toString(),
+                                request.query.latitude.toString(),
+                                request.query.distance],
+                                {
+                                    success: function (results) {
+                                        console.log("GetMessagesByLocation() successfully executed.");
+                                        response.send(statusCodes.OK, results);
+                                    },
+                                    error: function (err) {
+                                        console.log("GetMessagesByLocation() error", err);
+                                        response.send(statusCodes.OK, "GetMessagesByLocation() error");
+                                    }
+                                });
+};
+</code>
+</pre>
+            <p>
+                Client code calls this api is below. When the map is being loaded it checkes to see if the browser can support the geo-location or not.
+                If the location service is supported it calls the success callback method and this method calls "GetMessagesByLocation" api to get the messages to be displayed.
+            </p>
+<pre>
+<code>
+function GetMap() {
+    if ( navigator.geolocation ) {
+        navigator.geolocation.getCurrentPosition( locateSuccess, locateFail );
+    }
+    else {
+        alert( 'Geo location is not supported' );
+    }
+    Microsoft.Maps.loadModule( 'Microsoft.Maps.Themes.BingTheme', { callback: themesModuleLoaded });
+}
+function locateSuccess( loc ) {
+    place = loc;
+    userLocation = new Microsoft.Maps.Location( loc.coords.latitude, loc.coords.longitude );
+    map.setView( { center: userLocation, zoom: 13 });
+    client.invokeApi( "getmessagesbylocation", {
+        method: "GET",
+        parameters: {
+            longitude: loc.coords.longitude,
+            latitude: loc.coords.latitude,
+            distance: 10000
+        }
+    }).done( function ( results ) {
+            console.log( "results = ", results.result.length );
+            if ( results.result !== null ) {
+                for ( var i = 0; i < results.result.length; i++ ) {
+                    var messageLocation = new Microsoft.Maps.Location( results.result[i].latitude, results.result[i].longitude );
+                    var newPin = new Microsoft.Maps.Pushpin( messageLocation );
+                    var pinInfobox = new Microsoft.Maps.Infobox( messageLocation, { pushpin: newPin, title: results.result[i].text });
+                    map.entities.push( newPin );
+                    map.entities.push( pinInfobox );
+                }
+            }
+        }, function ( err ) {
+            alert( "Error: " + err );
+        });
+}
+</code>
+</pre>
+            <p>
+                Refresh your application. There should be no error message any more. If you need to debug the mobile service API you can go to "LOG" menu and check.
+            </p>
+            <div class="thumbnail">
+                <img src="http://azurebootcamp2014.blob.core.windows.net/bootcamp2014/ms_log.PNG">
+            </div>
+        </div>
+        <div class="page-header">
+            <h1>
+                InsertComment(Msg)
+            </h1>
+            <p>
+                The last piece of functionality we will show in this tutorial is for inserting the comment and show the message location on the map where it is posted.
+                For this method, we will override the standard <strong>"insert"</strong> function for <strong>"Item"</strong> table provided by the mobile service.
+                Go to <strong>"Data"</strong> menu and <strong>"script"</strong> and select <strong>"insert"</strong> operation.
+            </p>
+            <div class="thumbnail">
+                <img src="http://azurebootcamp2014.blob.core.windows.net/bootcamp2014/item_insert_step1.PNG">
+            </div>
+            <p>
+                Override the insert function with the following code. <strong>guid()</strong> is just a helper function to generate the unique id for each message.
+            </p>
+<pre>
+<code>
+function insert(item, user, request) {
+    console.log("request, user, item = ", request, user, item);
+    item.id = guid();
+    var queryString = "INSERT INTO Item(id, text, place) VALUES (?,?, geography::STPointFromText('POINT(' + ? + ' ' + ? + ')', 4326))";
+    mssql.query(queryString, [item.id, item.text, item.longitude.toString(), item.latitude.toString()], { 
+        success: function(insertedItem) {
+		  console.log("successfully inserted: ", insertedItem); 
+		  request.respond(statusCodes.OK, insertedItem); 
+        },
+		error: function(err) {
+		  console.error("Error inserting: ", err);
+		  request.respond();
+		} 
+	});
+}
+function guid() {
+    function _p8(s) {
+        var p = (Math.random().toString(16)+"000000000").substr(2,8);
+        return s ? "-" + p.substr(0,4) + "-" + p.substr(4,4) : p ;
+    }
+    return _p8() + _p8(true) + _p8(true) + _p8();
+}
+</code>
+</pre>
+            <p>
+                The client code inserts the users' comments is below.
+                For the demo purpose only, when the message is posted the location is randomized to simulate multiple users' locations.
+            </p>
+<pre>
+<code>
+function insertComment( msg ) {
+    $( "#userComment" ).val( "" );
+    var newLongitude = Math.round( ( place.coords.longitude + Math.random() * 0.05 ) * 10000 ) / 10000;
+    var newLatitude = Math.round( ( place.coords.latitude + Math.random() * 0.05 ) * 10000 ) / 10000;;
+    var item = {
+        text: msg,
+        longitude: newLongitude.toString(),
+        latitude: newLatitude.toString()
+    }
+    var itemTable = client.getTable( "Item" );
+    itemTable.insert( item ).done( function ( inserted ) {
+        var newMessageLocation = new Microsoft.Maps.Location( newLatitude, newLongitude );
+        var newPin = new Microsoft.Maps.Pushpin( newMessageLocation );
+        var pinInfobox = new Microsoft.Maps.Infobox( newMessageLocation, { pushpin: newPin, title: msg });
+        map.entities.push( newPin );
+        map.entities.push( pinInfobox );
+        map.setView( { center: newMessageLocation, zoom: 15 });
+    }, function ( err ) {
+            alert( "Error in inserting comment", err );
+        });
+}
+</code>
+</pre>
+            <div class="alert alert-success">
+                <strong>Well done! We are ALL finished.</strong> Let's post some messages !!.
+            </div>
+            <div class="thumbnail">
+                <img src="http://azurebootcamp2014.blob.core.windows.net/bootcamp2014/post_msg_success.PNG">
+            </div>
+        </div>
+        <div class="page-header">
+            <h1>
+                One more thing, We need to publish this app.
+            </h1>
+            <p>
+                Right click on your project name in Solution Explorer and select <strong>publish</strong>. Then you will be asked to set the publish profile.
+                Click <strong>Import</strong>.
+            </p>
+            <div class="thumbnail">
+                <img src="http://azurebootcamp2014.blob.core.windows.net/bootcamp2014/publish_app_step1.PNG">
+            </div>
+            <p>
+                Make sure you are signed in with the right account and hit <strong>New</strong>.
+            </p>
+            <div class="thumbnail">
+                <img src="http://azurebootcamp2014.blob.core.windows.net/bootcamp2014/publish_app_step2.PNG">
+            </div>
+            <p>
+                Specify the site name and hit <strong>Create</strong>.
+            </p>
+            <div class="thumbnail">
+                <img src="http://azurebootcamp2014.blob.core.windows.net/bootcamp2014/publish_app_step3.PNG">
+            </div>
+            <p>
+                <strong>Publish the app.</strong>
+            </p>
+            <div class="thumbnail">
+                <img src="http://azurebootcamp2014.blob.core.windows.net/bootcamp2014/publish_app_step4.PNG">
+            </div>
+            <p>
+                Add your new site to the CORS (cross-origin resource sharing) configuration so that this website can call the mobile service.
+            </p>
+            <div class="thumbnail">
+                <img src="http://azurebootcamp2014.blob.core.windows.net/bootcamp2014/publish_app_step5.PNG">
+            </div>
+            <div class="alert alert-success">
+                <strong>Our app is now live.</strong>
+            </div>
+        </div>
+        <div class="page-header">
+            <h1>
+                Other Application Ideas:
+            </h1>
+            <ul>
+                <li>
+                    Private photo sharing apps between Friends and Family.
+                </li>
+                <li>
+                    Video broadcasting application from the mobile device.
+                </li>
+                <li>
+                    More to come ...
+                </li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>
