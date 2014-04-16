@@ -1,13 +1,10 @@
-//var client = new WindowsAzure.MobileServiceClient(
-//                        "https://jkmobileservice.azure-mobile.net/",
-//                        "igrhDCBgNDHWlggSIAYmAZSlXTllup93");
-//var client = new WindowsAzure.MobileServiceClient(
-//                        "YOUR MOBILE SERVICE URL HERE",
-//                        "YOUR APPLICATION KEY HERE");
 var client = new WindowsAzure.MobileServiceClient(
-    "https://azurebootcamp2014.azure-mobile.net/",
-    "ALMrOcOwmVrsmtGGCYjcaOchPoARTd79"
-    );
+                        "YOUR MOBILE SERVICE URL HERE",
+                        "YOUR APPLICATION KEY HERE");
+//var client = new WindowsAzure.MobileServiceClient(
+//    "https://azurebootcamp2014.azure-mobile.net/",
+//    "ALMrOcOwmVrsmtGGCYjcaOchPoARTd79"
+//    );
 var map = null;
 var userLocation = null;
 var place = null;
