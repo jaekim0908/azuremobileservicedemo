@@ -57,7 +57,7 @@
 
         This tutorial will guide you through the steps and code for the virtual message board application. You can play around with the <a href="http://vmb.azurewebsites.net">live application here.</a>
         You will notice that the entire app is very simple and this is the benefit of using Azure Mobile Service as the backend of your javascript app.
-        <p> 
+        <p>
             In this tutorial, you will learn:
         </p>
         <ul>
@@ -82,14 +82,16 @@
             <h1>Dependencies</h1>
             <ul>
                 <li>
-                    <strong>Azure subscription.</strong> If you don't have any subscription you can try 
-                    <a href="http://azure.microsoft.com/en-us/pricing/free-trial/">FREE TRIAL</a> 
+                    <a href="http://azure.microsoft.com/en-us/account/">Azure Subscription.</a> If you don't have any subscription you can try
+                    <a href="http://azure.microsoft.com/en-us/pricing/free-trial/">FREE TRIAL</a>
                     for the duration of bootcamp and cancel the subscription once you're done to avoid any unwanted charges.
                     you will need a credit card for this.
                 </li>
                 <li>
                     <a href="http://msdn.microsoft.com/en-US/library/azure/ff687127.aspx">Azure Tools for Visual Studio</a>
                 </li>
+                <li>
+                    <a href="http://nodejs.org/">Node.js v0.10.26</a>
                 <li>
                     <a href="https://nodejstools.codeplex.com/">Node.js Tools for Visual Studio</a>
                 </li>
@@ -106,7 +108,7 @@
                         This application uses the Azure Mobile Services to handle the user authentications and data operations. The Mobile Services is one of Azure Platform as a service (PaaS) offering.
                     </li>
                     <li>
-                        You manage your virtual infrastructure and services using Azure management portal and you need to have a subscription in order to log into the Azure management portal. 
+                        You manage your virtual infrastructure and services using Azure management portal and you need to have a subscription in order to log into the Azure management portal.
                     </li>
                     <li>
                         As a developer, you can build/debug/test/deploy your code into the Azure using a Visual Studio.
@@ -119,6 +121,7 @@
         </div>
         <div class="page-header">
             <h1>Create a Mobile Service</h1>
+            <a href="http://azure.microsoft.com/en-us/account/" class="btn btn-sm btn-info" role="button">Azure Management Portal</a>
             <p>
                 Login into Azure Management Portal and click on MOBILE SERVICES on the left panel. Then select "NEW" from bottom left corner of the screen.
             </p>
@@ -126,14 +129,26 @@
                 <img src="http://azurebootcamp2014.blob.core.windows.net/bootcamp2014/create_mobile_service_step1.PNG" />
             </div>
             <p>
-                Specify Mobile Service URL
+                Click "Create".
             </p>
+            <div class="thumbnail">
+                <img src="http://azurebootcamp2014.blob.core.windows.net/bootcamp2014/create_mobile_service_step1.1.PNG" />
+            </div>
+            <p>
+                Specify Mobile Service URL, Database option, region and backend. If you already have the database you can use your own.
+            </p>
+            <div class="alert alert-info">
+                Please use different service URL name than this example.
+            </div>
             <div class="thumbnail">
                 <img src="http://azurebootcamp2014.blob.core.windows.net/bootcamp2014/create_mobile_service_step2.PNG" />
             </div>
             <p>
-                Specify DB Setting
+                Specify DB Setting - Name, Server, Login Name, Login Password and Region.
             </p>
+            <div class="alert alert-danger">
+                Please write down the Login Name and Password. You need this later in this tutorial.
+            </div>
             <div class="thumbnail">
                 <img src="http://azurebootcamp2014.blob.core.windows.net/bootcamp2014/create_mobile_service_step3.PNG" />
             </div>
@@ -145,6 +160,7 @@
             <h1>
                 Integrate Mobile Service backend
             </h1>
+            <a href="http://azure.microsoft.com/en-us/account/" class="btn btn-sm btn-info" role="button">Azure Management Portal</a>
             <p>
                 Click on your mobile service name and go to the detail page. Copy the code for creating a mobile service client.
             </p>
