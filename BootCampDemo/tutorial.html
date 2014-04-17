@@ -86,8 +86,12 @@
                 </li>
             </ul>
             <p>
-                Download code for this tutorial
+                Download code for this tutorial:
             </p>
+            <div class="alert alert-danger">
+                Before downloading the source make sure you have all the dependencies listed above installed. 
+                Otherwise Visual Stuio may complain that this project/solution is not compatible and needs to be converted.
+            </div>
             <p>
                 <a href="https://github.com/jaekim0908/azuremobileservicedemo/archive/master.zip" class="btn btn-primary" role="button">.zip File</a>
                 <a href="https://github.com/jaekim0908/azuremobileservicedemo" class="btn btn-success" role="button">GitHub</a>
@@ -158,11 +162,15 @@
             </h1>
             <a href="http://azure.microsoft.com/en-us/account/" class="btn btn-sm btn-info" role="button">Azure Management Portal</a>
             <p>
-                Click on your mobile service name and go to the detail page. Copy the code for creating a mobile service client.
+                Click on your mobile service name and go to the detail page. 
+                You will see <strong> "GET STARTED" </strong> section.
+                Select HTML/Javascript as a platform and open "Connect an Existing HTML App" section.
+                Copy the code for creating a mobile service client.
             </p>
             <div class="thumbnail">
                 <img src="http://azurebootcamp2014.blob.core.windows.net/bootcamp2014/create_mobile_service_step4.PNG" />
             </div>
+            <button class="btn btn-sm btn-success" type="button">Visual Studio on your local machine</button>
             <p>
                 Replace the following code in app.js with the code copied above.
             </p>
@@ -175,11 +183,12 @@ var client = new WindowsAzure.MobileServiceClient(
 </pre>
         </div>
         <div class="page-header">
-            <h1>
+            <h3>
                 Create a DB Table
-            </h1>
+            </h3>
+            <a href="http://azure.microsoft.com/en-us/account/" class="btn btn-sm btn-info" role="button">Azure Management Portal</a>
             <p>
-                Go to Step 2 (Store data in your mobile service) in GET STARTED page.
+                Go to Step 2 in <strong>GET STARTED</strong> instruction for HTML/Javascript platform and click "Create Item table" button.
                 Mobile service will create a table called "Item" with 4 default columns - id, _createdAt, _updatedAt and _version.
                 You can override the id column with your own unique value if you want.
                 Other columns will be automatically populated when you perform insert and update on this table.
@@ -188,7 +197,7 @@ var client = new WindowsAzure.MobileServiceClient(
                 <img src="http://azurebootcamp2014.blob.core.windows.net/bootcamp2014/create_table_step1.PNG" />
             </div>
             <p>
-                You can go to "Data" menu of your mobile service. Next: Select your table name ("Item") then "Columns" to see the table's detail.
+                You can go to "Data" menu of your mobile service. In the next page, Select your table name ("Item") then "Columns" to see the table's detail.
             </p>
             <div class="thumbnail">
                 <img src="http://azurebootcamp2014.blob.core.windows.net/bootcamp2014/create_table_step1-a.PNG">
@@ -198,21 +207,24 @@ var client = new WindowsAzure.MobileServiceClient(
             </div>
         </div>
         <div class="page-header">
-            <h1>
+            <h3>
                 Adding new columns to Item table.
-            </h1>
+            </h3>
             <p>
-                Our application handles the location data we need to create a column which can store a point data (latitude and longitude).
-                This data type is not supported in the mobile service UI so we need to connect to the database to add this column.
-                Select SQL DB databases from the side bar in Azure management portal, select the database the mobile service is using then click "Manage" from the bottom drawer.
+                Since our application handles the location data we need to create a column which can store a point data (latitude and longitude).
+                Adding this data type is not supported in the mobile service UI so we need to connect to the database to add this column.
+                Select SQL DB databases from the side bar in Azure management portal, select the database the mobile service is using and then click "Manage" from the bottom drawer.
             </p>
             <div class="thumbnail">
                 <img src="http://azurebootcamp2014.blob.core.windows.net/bootcamp2014/add_column_to_db_step1.PNG">
             </div>
             <p>
                 If you can't connect to your DB one of the common issues is the firewall setting.
-                If you run into this issue take an IP address from the error message and add that to the firewall configuration through the management portal.
+                If you run into this issue take an IP address from the error message and add that to the firewall configuration through the management portal and try again.
             </p>
+            <div class="alert alert-info">
+                Sometimes, there is a network delay of 2-3 minutes for this new configuration to propagate. So if the first retry doesn't work wait for 2-3 minutes and try again.
+            </div>
             <div class="thumbnail">
                 <img src="http://azurebootcamp2014.blob.core.windows.net/bootcamp2014/sql_connect_error.PNG">
             </div>
@@ -229,7 +241,14 @@ var client = new WindowsAzure.MobileServiceClient(
                 <img src="http://azurebootcamp2014.blob.core.windows.net/bootcamp2014/managed_allowed_ip_step2.PNG">
             </div>
             <p>
-                Once logged into the your DB's web management portal select your db and table then hit "Edit".
+                Once logged into the your DB's web management portal you should see the summary page.
+                Check to make sure your db name matches then click "Design" at bottom of left side navigation pane.
+            </p>
+            <div class="thumbnail">
+                <img src="http://azurebootcamp2014.blob.core.windows.net/bootcamp2014/design_sql_table_step1.PNG">
+            </div>
+            <p>
+                Click "Edit" button for Item table.
             </p>
             <div class="thumbnail">
                 <img src="http://azurebootcamp2014.blob.core.windows.net/bootcamp2014/add_column_to_db_step2.PNG">
@@ -245,28 +264,31 @@ var client = new WindowsAzure.MobileServiceClient(
             <h1>
                 Authentication
             </h1>
+            <a href="http://azure.microsoft.com/en-us/account/" class="btn btn-sm btn-info" role="button">Azure Management Portal</a>
             <p>
-                We are done with the basic plumbing and environment set up. It's time to dd some application logic, start with the authentication.
-                Azure Mobile Service makes adding various authentication options really easy. You can add the authentication options to use Microsoft account, Google Account, Facebook, Twitter and Azure Active Directory.
-                In this tutorial, we're going to show you how to set up the authentication using Azure Active Directory. If you are interested in setting up other types of authentications you can go to
-                <a href="http://azure.microsoft.com/en-us/documentation/articles/mobile-services-html-get-started-users/">Azure Mobile Service Authentication</a> and follow the instructions there.
-                Also, this demo app has implemented 3 different authentication options so you can take a look.
-                To start, let's do CRTL + F5 to start your application. Once it's loaded try to login with Microsoft account. You will get the login failure message. Let's fix this.
+                We are done with the basic plumbing and environment set up. It's time to dd some application logic, starting with the authentication.
+                Azure Mobile Service makes adding various authentication options really easy. 
+                You can add the authentication options to use Microsoft account, Google Account, Facebook, Twitter and Azure Active Directory with only a few lines of codes.
+                In this tutorial, we're going to show you how to set up the authentication using Azure Active Directory.
+            </p>
+            <button class="btn btn-sm btn-success" type="button">Visual Studio on your local machine</button>
+            <p>
+                Switch over to your visual studio and CTRL + F5 to run the application. Once it's loaded try to login with Azure Active Directory (your @microsoft.com login). 
+                You will get the login failure message. Let's fix this by registering your app to use AAD.
                 Go to:
                 <a href="http://azure.microsoft.com/en-us/documentation/articles/mobile-services-how-to-register-active-directory-authentication/">
                     Register your app to use an Azure Active Directory
                 </a>
-                and follow the instructions to register your end.
+                and follow the instructions
             </p>
             <p>
-                When the registration is successful go to "Identity" menu of your mobile service and provide "client id" under Azure Active Directory section.
+                If you are interested in setting up other types of authentications you can go to
+                <a href="http://azure.microsoft.com/en-us/documentation/articles/mobile-services-html-get-started-users/">Azure Mobile Service Authentication</a> and follow the instructions there.
+                Also, this demo app has implemented 3 different authentication options so you can take a look.
             </p>
-            <div class="thumbnail">
-                <img src="http://azurebootcamp2014.blob.core.windows.net/bootcamp2014/authentication_aad_step1.PNG">
-            </div>
             <p>
-                Now, go back to your application and try to login with Microsoft account again. You should be able to log in successfully.
-                After logging in, you will see an error message and we will address it later.
+                Now, go back to your application and try to login with AAD again. You should be able to log in successfully.
+                After logging in, you will see an error message but ignore this for now. We will address it later.
             </p>
             <div class="thumbnail">
                 <img src="http://azurebootcamp2014.blob.core.windows.net/bootcamp2014/authentication_ms_step2.PNG">
@@ -314,6 +336,7 @@ $("#sign-in-msft").click(function (event) {
             <h1>
                 GetMessagesByLocation()
             </h1>
+            <a href="http://azure.microsoft.com/en-us/account/" class="btn btn-sm btn-info" role="button">Azure Management Portal</a>
             <p>
                 This function takes logitude and latitude of the current location and distance in meter.
                 It returns a list of messages whose locations are within the distance.
@@ -409,6 +432,7 @@ function locateSuccess( loc ) {
             <h1>
                 InsertComment(Msg)
             </h1>
+            <a href="http://azure.microsoft.com/en-us/account/" class="btn btn-sm btn-info" role="button">Azure Management Portal</a>
             <p>
                 The last piece of functionality we will show in this tutorial is for inserting the comment and show the message location on the map where it is posted.
                 For this method, we will override the standard <strong>"insert"</strong> function for <strong>"Item"</strong> table provided by the mobile service.
@@ -486,6 +510,7 @@ function insertComment( msg ) {
             <h1>
                 One more thing, We need to publish this app.
             </h1>
+            <button class="btn btn-sm btn-success" type="button">Visual Studio on your local machine</button>
             <p>
                 Right click on your project name in Solution Explorer and select <strong>publish</strong>. Then you will be asked to set the publish profile.
                 Click <strong>Import</strong>.
