@@ -1,10 +1,10 @@
-var client = new WindowsAzure.MobileServiceClient(
-                        "YOUR MOBILE SERVICE URL HERE",
-                        "YOUR APPLICATION KEY HERE");
 //var client = new WindowsAzure.MobileServiceClient(
-//    "https://azurebootcamp2014.azure-mobile.net/",
-//    "ALMrOcOwmVrsmtGGCYjcaOchPoARTd79"
-//    );
+//                        "YOUR MOBILE SERVICE URL HERE",
+//                        "YOUR APPLICATION KEY HERE");
+var client = new WindowsAzure.MobileServiceClient(
+    "https://azurebootcamp2014.azure-mobile.net/",
+    "ALMrOcOwmVrsmtGGCYjcaOchPoARTd79"
+    );
 var map = null;
 var userLocation = null;
 var place = null;
@@ -47,7 +47,7 @@ function logIn( loginAccount ) {
             sessionStorage.loggedInUser = JSON.stringify( client.currentUser );
             refreshAuthDisplay();
         }, function ( err ) {
-                alert( "Log in Error: " + err );
+                console.error( "Log in Error: " + err );
             });
     }
 }
