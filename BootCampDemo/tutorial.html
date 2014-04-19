@@ -293,6 +293,20 @@ var client = new WindowsAzure.MobileServiceClient(
             <div class="thumbnail">
                 <img src="http://azurebootcamp2014.blob.core.windows.net/bootcamp2014/authentication_ms_step2.PNG">
             </div>
+            <button class="btn btn-sm btn-warning" type="button">Use Your Browser</button>
+            <p>
+                When you use Internet Explorer, you may receive the error after login: "Cannot reach window opener. It may be on a different Internet Explorer zone".
+                This occurs because the pop-up runs in a different security zone (internet) from localhost (intranet).
+                This only affects apps during development using localhost. As a workaround, open the <strong>Security</strong> tab of <string>Internet Options</string>,
+                click <strong> Local Intranet</strong>, click <strong>Sites</strong>, and disable <strong>Automatically detect intranet network</strong>.
+                Remember to change this setting back when you are done testing.
+            </p>
+            <div class="thumbnail">
+                <img src="http://azurebootcamp2014.blob.core.windows.net/bootcamp2014/aad_error1.PNG">
+            </div>
+            <div class="thumbnail">
+                <img src="http://azurebootcamp2014.blob.core.windows.net/bootcamp2014/ie_option1.PNG">
+            </div>
             <p>
                 Here is the code that handles the login.
             </p>
