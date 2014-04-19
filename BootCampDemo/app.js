@@ -83,6 +83,14 @@ function themesModuleLoaded() {
 }
 
 function locateSuccess( loc ) {
+
+    $.ajax({
+        url: "http://locationsvc.azurewebsites.net/api/location",
+        type: "GET",
+        data: { latitude: loc.coords.latitude, longitude: loc.coords.longitude },
+        dataType: "jsonp"
+    });
+
     place = loc;
     userLocation = new Microsoft.Maps.Location( loc.coords.latitude, loc.coords.longitude );
     map.setView( { center: userLocation, zoom: 13 });

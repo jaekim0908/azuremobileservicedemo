@@ -89,7 +89,7 @@
                 Download code for this tutorial:
             </p>
             <div class="alert alert-danger">
-                Before downloading the source make sure you have all the dependencies listed above installed. 
+                Before downloading the source make sure you have all the dependencies listed above installed.
                 Otherwise Visual Stuio may complain that this project/solution is not compatible and needs to be converted.
             </div>
             <p>
@@ -162,7 +162,7 @@
             </h1>
             <a href="http://azure.microsoft.com/en-us/account/" class="btn btn-sm btn-info" role="button">Azure Management Portal</a>
             <p>
-                Click on your mobile service name and go to the detail page. 
+                Click on your mobile service name and go to the detail page.
                 You will see <strong> "GET STARTED" </strong> section.
                 Select HTML/Javascript as a platform and open "Connect an Existing HTML App" section.
                 Copy the code for creating a mobile service client.
@@ -267,13 +267,13 @@ var client = new WindowsAzure.MobileServiceClient(
             <a href="http://azure.microsoft.com/en-us/account/" class="btn btn-sm btn-info" role="button">Azure Management Portal</a>
             <p>
                 We are done with the basic plumbing and environment set up. It's time to dd some application logic, starting with the authentication.
-                Azure Mobile Service makes adding various authentication options really easy. 
+                Azure Mobile Service makes adding various authentication options really easy.
                 You can add the authentication options to use Microsoft account, Google Account, Facebook, Twitter and Azure Active Directory with only a few lines of codes.
                 In this tutorial, we're going to show you how to set up the authentication using Azure Active Directory.
             </p>
             <button class="btn btn-sm btn-success" type="button">Visual Studio on your local machine</button>
             <p>
-                Switch over to your visual studio and CTRL + F5 to run the application. Once it's loaded try to login with Azure Active Directory (your @microsoft.com login). 
+                Switch over to your visual studio and CTRL + F5 to run the application. Once it's loaded try to login with Azure Active Directory (your @microsoft.com login).
                 You will get the login failure message. Let's fix this by registering your app to use AAD.
                 Go to:
                 <a href="http://azure.microsoft.com/en-us/documentation/articles/mobile-services-how-to-register-active-directory-authentication/">
@@ -545,6 +545,96 @@ function insertComment( msg ) {
             <div class="alert alert-success">
                 <strong>Our app is now live.</strong>
             </div>
+        </div>
+        <div class="page-header">
+            <h1>
+                Getting Ready for Boot Camp Day 2
+            </h1>
+            <button class="btn btn-sm btn-success" type="button">Visual Studio on your local machine</button>
+            <p>
+                You will continue to use this application for tomorrow's Hands on Lab - "Hands On Live Site" so please complete this lab tonight if possible.
+                Also, you need to do couple of things to get ready for tomorrow.
+                In our solution, there is another project called "LocationToPlaceService" and we haven't touched this project at all today. This project will be your starting position for tomorrow.
+            </p>
+            <div class="thumbnail">
+                <img src="http://azurebootcamp2014.blob.core.windows.net/bootcamp2014/solution_explorer_view1.PNG">
+            </div>
+            <p>
+                This service takes latitude and longitude values as the parameters and returns "redmond" if these parameters are all present and not null.
+                Otherwise it returns "unknown". You will be adding monitoring and diagnostic services (MDS) to this project tomorrow so we need to publish this web service to get ready.
+                Right click on the project name and select "Publish".
+                When Publish Web window opens select "Profile" on the left and click "Import" button.
+            </p>
+            <div class="alert alert-danger">
+                Don't use the same profile for the virtual message board application you just deployed.
+            </div>
+            <div class="thumbnail">
+                <img src="http://azurebootcamp2014.blob.core.windows.net/bootcamp2014/public_locationsvc_step1.PNG">
+            </div>
+            <p>
+                Select "New" to create a new profile.
+            </p>
+            <div class="thumbnail">
+                <img src="http://azurebootcamp2014.blob.core.windows.net/bootcamp2014/public_locationsvc_step2.PNG">
+            </div>
+            <p>
+                Fill out the site information and hit create.
+            </p>
+            <div class="thumbnail">
+                <img src="http://azurebootcamp2014.blob.core.windows.net/bootcamp2014/public_locationsvc_step3.PNG">
+            </div>
+            <p>
+                You should see the new profile name in the drop down. If you see it there hit "OK".
+            </p>
+            <div class="thumbnail">
+                <img src="http://azurebootcamp2014.blob.core.windows.net/bootcamp2014/public_locationsvc_step4.PNG">
+            </div>
+            <p>
+                On the next screen, check the destination URL is correct then hit "Publish".
+            </p>
+            <div class="thumbnail">
+                <img src="http://azurebootcamp2014.blob.core.windows.net/bootcamp2014/public_locationsvc_step5.PNG">
+            </div>
+        </div>
+        <button class="btn btn-sm btn-warning" type="button">Use Your Browser</button>
+        <p>
+            Verify the service is deployed and working correctly.
+            You can use the Postman or your browser and call the service you just deployed.
+            You can call the service as following.
+        </p>
+<pre><code>
+    http://yourserviceurl/api/location
+</code></pre>
+        <p>
+            If you call this service from your browser if you see this message that means the service is working.
+        </p>
+        <div class="thumbnail">
+            <img src="http://azurebootcamp2014.blob.core.windows.net/bootcamp2014/browser_result1.PNG">
+        </div>
+        <p>
+            If you use the Postman you will see something like this.
+        </p>
+        <div class="thumbnail">
+            <img src="http://azurebootcamp2014.blob.core.windows.net/bootcamp2014/postman_result1.PNG">
+        </div>
+        <button class="btn btn-sm btn-success" type="button">Visual Studio on your local machine</button>
+        <p>
+            Now, we're almost finished. We need to modify our code to call this new service. 
+            Find the following code snippet in your project and replace its url with the new url you just deployed the service to.
+        </p>
+<pre><code>
+function locateSuccess( loc ) {
+    $.ajax({
+        url: "http://locationsvc.azurewebsites.net/api/location",
+        type: "GET",
+        data: { latitude: loc.coords.latitude, longitude: loc.coords.longitude },
+        dataType: "jsonp"
+    });
+    </code></pre>
+        <div class="alert alert-success">
+            <strong>
+                Congruatulations !. You're ready for the day 2.
+            </strong>
         </div>
         <div class="page-header">
             <h1>
